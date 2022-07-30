@@ -8,7 +8,7 @@
   - [IAM: Identity Access & Management]()
   - [EC2: Virtual Machines]()
   - [Security Groups]()
-  - [Scalability & High Availability](1-aws-fundamentals/security-groups.md)
+  - [Scalability & High Availability](1-aws-fundamentals/scalability_and_high_availability.md)
   - [ELB: Elastic Load Balancers](1-aws-fundamentals/elastic_load_balancers.md)
   - [ASG: Auto Scaling Group]()
   - [EBS: Elastic Block Store]()
