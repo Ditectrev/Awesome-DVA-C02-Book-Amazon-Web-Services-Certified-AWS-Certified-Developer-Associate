@@ -10,7 +10,7 @@
   - [Security Groups]()
   - [Scalability & High Availability](1-aws-fundamentals/scalability_and_high_availability.md)
   - [ELB: Elastic Load Balancers](1-aws-fundamentals/elastic_load_balancers.md)
-  - [ASG: Auto Scaling Group]()
+  - [ASG: Auto Scaling Group](1-aws-fundamentals/auto_scaling_group.md)
   - [EBS: Elastic Block Store]()
   - [RDS: Relational Database Service]()
   - [Route 53]()
