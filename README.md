@@ -1,6 +1,6 @@
 # AWS-Certified-Developer-Associate-Notes
 
-## 2021 AWS developer associate exam
+## AWS developer associate exam
 
 ### Table of contents
 
@@ -12,7 +12,7 @@
   - [ELB: Elastic Load Balancers](1-aws-fundamentals/elastic_load_balancers.md)
   - [ASG: Auto Scaling Group](1-aws-fundamentals/auto_scaling_group.md)
   - [EBS: Elastic Block Store]()
-  - [RDS: Relational Database Service]()
+  - [RDS: Relational Database Service](1-aws-fundamentals/relational_database_service.md)
   - [Route 53]()
   - [ElastiCache]()
   - [VPC: Virtual Private Cloud]()
