@@ -150,3 +150,92 @@
   * No manual DB patching
   * No manual OS patching
   * No way to audit the underlying instance
+
+## Amazon Aurora
+
+* Aurora is a proprietary technology from AWS (not open sourced)
+* Postgres and MySQL are both supported as Aurora DB (that means your drivers will work as if Aurora was a Postgres or MySQL database)
+* Aurora is “AWS cloud optimized” and claims 5x performance improvement over MySQL on RDS, over 3x the performance of Postgres on RDS
+* Aurora storage automatically grows in increments of 10GB, up to 128 TB.
+* Aurora can have 15 replicas while MySQL has 5, and the replication process is faster (sub 10 ms replica lag)
+* Failover in Aurora is instantaneous. It’s HA (High Availability) native.
+* Aurora costs more than RDS (20% more) – but is more efficient
+
+### Aurora High Availability and Read Scaling
+
+* 6 copies of your data across 3 AZ:
+  * 4 copies out of 6 needed for writes
+  * 3 copies out of 6 need for reads
+  * Self healing with peer-to-peer replication 
+  * Storage is striped across 100s of volumes
+* One Aurora Instance takes writes (master)
+* Automated failover for master in less than
+30 seconds
+* Master + up to 15 Aurora Read Replicas serve reads
+* Support for Cross Region Replication
+
+### Features of Aurora
+
+* Automatic fail-over
+* Backup and Recovery
+* Isolation and security
+* Industry compliance
+* Push-button scaling
+* Automated Patching with Zero Downtime
+* Advanced Monitoring
+* Routine Maintenance
+* Backtrack: restore data at any point of time without using backups
+
+### Aurora Security
+
+* Similar to RDS because uses the same engines
+* Encryption at rest using KMS
+* Automated backups, snapshots and replicas are also encrypted
+* Encryption in flight using SSL (same process as MySQL or Postgres)
+* Possibility to authenticate using IAM token (same method as RDS)
+* You are responsible for protecting the instance with security groups
+* You can’t SSH
+
+## Amazon ElastiCache Overview
+
+* The same way RDS is to get managed Relational Databases...
+* ElastiCache is to get managed Redis or Memcached
+* Caches are in-memory databases with really high performance, low latency
+* Helps reduce load off of databases for read intensive workloads
+* Helps make your application stateless
+* AWS takes care of OS maintenance / patching, optimizations, setup, configuration, monitoring, failure recovery and backups
+* Using ElastiCache involves heavy application code changes
+
+### ElastiCache Solution Architecture - DB Cache
+
+* Applications queries ElastiCache, if not available, get from RDS and store in ElastiCache.
+* Helps relieve load in RDS
+* Cache must have an invalidation strategy to make sure only the most current data is used in there.
+
+### ElastiCache Solution Architecture – User Session Store
+
+* User logs into any of the application
+* The application writes the session data into ElastiCache
+* The user hits another instance of our application
+* The instance retrieves the data and the user is already logged in
+
+### ElastiCache – Redis vs Memcached
+
+REDIS  | MEMCACHED
+------------- | -------------
+Multi AZ with Auto-Failover  | Multi-node for partitioning of data (sharding)
+Read Replicas to scale reads and have high availability  | No high availability (replication)
+Data Durability using AOF persistence  | Non persistent
+Backup and restore features  | No backup and restore,  Multi-threaded architecture
+
+### ElastiCache – Cache Security
+
+* All caches in ElastiCache:
+  * Do not support IAM authentication
+  * IAM policies on ElastiCache are only used for AWS API-level security
+* Redis AUTH
+  * You can set a “password/token” when you create a Redis cluster
+  * This is an extra level of security for your cache (on top of security groups)
+  * Support SSL in flight encryption
+* Memcached
+  * Supports SASL-based authentication (advanced)
