@@ -239,3 +239,75 @@ Backup and restore features  | No backup and restore,  Multi-threaded architectu
   * Support SSL in flight encryption
 * Memcached
   * Supports SASL-based authentication (advanced)
+
+### ElastiCache Replication: Cluster Mode Disabled
+
+* One primary node, up to 5 replicas
+* Asynchronous Replication
+* The primary node is used for read/write
+* The other nodes are read-only
+* **One shard, all nodes have all the data**
+* Guard against data loss if node failure
+* Multi-AZ enabled by default for failover
+* Helpful to scale read performance
+
+### ElastiCache Replication: Cluster Mode Enabled
+
+* Data is partitioned across shards (helpful to scale writes)
+* Each shard has a primary and up to 5 replica nodes (same concept as before)
+* Multi-AZ capability
+* Up to 500 nodes per cluster:
+* 500 shards with single master
+* 250 shards with 1 master and 1 replica
+* 83 shards with one master and 5 replicas
+
+### Caching Implementation Considerations
+
+* Read more at: <https://aws.amazon.com/caching/implementation-considerations/>
+* Is it safe to cache data? Data may be out of date, eventually consistent
+* Is caching effective for that data?
+* Pattern: data changing slowly, few keys are frequently needed
+* Anti patterns: data changing rapidly, all large key space frequently needed
+* Is data structured well for caching?
+* example: key value caching, or caching of aggregations results
+* Which caching design pattern is the most appropriate?
+
+### Lazy Loading / Cache-Aside / Lazy Population
+
+* Pros
+  * Only requested data is cached (the cache isn’t filled up with unused data)
+  * Node failures are not fatal (just increased latency to warm the cache)
+* Cons
+  * Cache miss penalty that results in 3 round trips, noticeable delay for that request
+  * Stale data: data can be updated in the database and outdated in the cache
+
+### Write Through – Add or Update cache when database is updated
+
+* Pros:
+  * Data in cache is never stale, reads are quick
+  * Write penalty vs Read penalty (each write requires 2 calls)
+* Cons:
+  * Missing Data until it is added / updated in the DB. Mitigation is to implement Lazy Loading strategy as well
+  * Cache churn – a lot of the data will never be read
+
+### Cache Evictions and Time-to-live (TTL)
+
+* Cache eviction can occur in three ways:
+  * You delete the item explicitly in the cache
+  * Item is evicted because the memory is full and it’s not recently used (LRU)
+  * Yousetanitemtime-to-live(orTTL)
+* TTL are helpful for any kind of data:
+  * Leaderboards
+  * Comments
+  * Activity streams
+* TTL can range from few seconds to hours or days
+
+* If too many evictions happen due to memory, you should scale up or out
+
+### Final words of wisdom
+
+* Lazy Loading / Cache aside is easy to implement and works for many situations as a foundation, especially on the read side
+* Write-through is usually combined with Lazy Loading as targeted for the queries or workloads that benefit from this optimization
+* Setting a TTL is usually not a bad idea, except when you’re using Write- through. Set it to a sensible value for your application
+* Only cache the data that makes sense (user profiles, blogs, etc...)
+* Quote:There are only two hard things in Computer Science: cache invalidation and naming things
