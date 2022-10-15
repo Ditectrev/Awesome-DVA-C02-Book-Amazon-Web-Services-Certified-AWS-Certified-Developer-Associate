@@ -1,182 +1,281 @@
 # EC2: Virtual Machines
 
-- [EC2 User Data](#ec2-user-data)
-- [EC2 Meta Data](#ec2-meta-data)
-- [EC2 Instance Launch Types](#ec2-instance-launch-types)
-- [EC2 Pricing](#ec2-pricing)
-- [AMIs](#AMIs)
-- [EC2 Instances Overview](#ec2-instances-overview)
+- [EC2: Virtual Machines](#ec2-virtual-machines)
+  - [What is Amazon EC2?](#what-is-amazon-ec2)
+    - [EC2 sizing & configuration options](#ec2-sizing--configuration-options)
+    - [EC2 User Data](#ec2-user-data)
+    - [EC2 Instance Types - Overview](#ec2-instance-types---overview)
+      - [General Purpose](#general-purpose)
+      - [Compute Optimized](#compute-optimized)
+      - [Memory Optimized](#memory-optimized)
+      - [Storage Optimized](#storage-optimized)
+  - [Introduction to Security Groups](#introduction-to-security-groups)
+  - [Deeper Dive](#deeper-dive)
+  - [The fundamental of network security in AWS (Good to know)](#the-fundamental-of-network-security-in-aws-good-to-know)
+  - [Classic Ports to know](#classic-ports-to-know)
+  - [EC2 Instance Launch Types](#ec2-instance-launch-types)
+    - [On Demand Instance](#on-demand-instance)
+    - [Reserved Instances](#reserved-instances)
+    - [Savings Plans](#savings-plans)
+    - [Spot Instances](#spot-instances)
+    - [Dedicated Hosts](#dedicated-hosts)
+    - [Dedicated Instances](#dedicated-instances)
+    - [Capacity Reservations](#capacity-reservations)
+  - [Which purchasing option is right for me?](#which-purchasing-option-is-right-for-me)
+  - [Price Comparison Example – m4.large – us-east-1](#price-comparison-example--m4large--us-east-1)
+  - [Shared Responsibility Model for EC2](#shared-responsibility-model-for-ec2)
+  - [EC2 Section – Summary](#ec2-section--summary)
 
-By default, your EC2 machine comes with:
-- A private IP for the internal AWS Network
-- A public IP for the WWW
+## What is Amazon EC2?
 
-When you SSH into your EC2 machine:
-- We can’t use a private IP, because we are not in the same network
-- We can only use the public IP
+Amazon Elastic Compute Cloud (Amazon EC2) provides scalable computing capacity in the Amazon Web Services (AWS) Cloud.
 
-If your machine is stopped and then restarted, the public IP will change
+- EC2 = Elastic Compute Cloud = Infrastructure as a Service
+- It mainly consists in the capability of :
+  - Renting virtual machines (EC2)
+  - Storing data on virtual drives (EBS)
+  - Distributing load across machines (ELB)
+  - Scaling the services using an auto-scaling group (ASG)
+- Knowing EC2 is fundamental to understand how the Cloud works
 
-## EC2 User Data
+### EC2 sizing & configuration options
 
-* It is possible to bootstrap our instances using an EC2 User data script
-- Bootstrapping means launching commands when a machine starts
-- That script is only run once at the instance first start
-- Purpose: Ec2 data is used to automated boot tasks such as:
+- Operating System (OS): Linux, Windows or Mac OS
+- How much compute power & cores (CPU)
+- How much random-access memory (RAM)
+- How much storage space:
+  - Network-attached (EBS & EFS)
+  - hardware (EC2 Instance Store)
+- Network card: speed of the card, Public IP address
+- Firewall rules: **security group**
+- Bootstrap script (configure at first launch): EC2 User Data
+
+### EC2 User Data
+
+- It is possible to bootstrap our instances using an **EC2 User data** script.
+- **bootstrapping** means launching commands when a machine starts
+- That script is **only run once** at the instance **first start**
+- EC2 user data is used to automate boot tasks such as:
   - Installing updates
   - Installing software
   - Downloading common files from the internet
+  - Anything you can think of
 - The EC2 User Data Script runs with the root user
-  
-## EC2 Meta Data
 
-* Information about your EC2 instance
-- It allows EC2 isntances to "learn" about themselves without having to use an IAM role for that purpose
-- Powerful but one of the least known features to developers
-- You can retrieve IAM roles from the metadata but **not** IAM policies
-- URL: {ec2-ip-address}/latest/meta-data
+### EC2 Instance Types - Overview
+
+- You can use different types of EC2 instances that are optimised for different use cases (<https://aws.amazon.com/ec2/instance-types/>)
+  - [General Purpose](#general-purpose)
+  - [Compute Optimized](#compute-optimized)
+  - [Memory Optimized](#memory-optimized)
+  - [Storage Optimized](#storage-optimized)
+  - Accelerated Computing
+
+- AWS has the following naming convention: m5.2xlarge
+- m: instance class
+- 5: generation (AWS improves them over time)
+- 2xlarge: size within the instance class
+
+#### General Purpose
+
+- Great for a diversity of workloads such as web servers or code repositories
+- Balance between:
+  - Compute
+  - Memory
+  - Networking
+
+#### Compute Optimized
+
+- Great for compute-intensive tasks that require high performance processors:
+  - Batch processing workloads
+  - Media transcoding
+  - High performance web servers
+  - High performance computing (HPC)
+  - Scientific modeling & machine learning
+  - Dedicated gaming servers
+
+#### Memory Optimized
+
+- Fast performance for workloads that process large data sets in memory
+- Use cases:
+  - High performance, relational/non-relational databases
+  - Distributed web scale cache stores
+  - In-memory databases optimized for BI (business intelligence)
+  - Applications performing real-time processing of big unstructured data
+
+#### Storage Optimized
+
+- Great for storage-intensive tasks that require high, sequential read and write access to large data sets on local storage
+- Use cases:
+  - High frequency online transaction processing (OLTP) systems
+  - Relational & NoSQL databases
+  - Cache for in-memory databases (for example, Redis)
+  - Data warehousing applications
+  - Distributed file systems
+
+## Introduction to Security Groups
+
+- Security Groups are the fundamental of network security in AWS
+- They control how traffic is allowed into or out of our EC2 Instances.
+- Security groups only contain **allow** rules
+- Security groups rules can reference by IP or by security group
+
+## Deeper Dive
+
+- Security groups are acting as a **“firewall”** on EC2 instances
+- They regulate:
+  - Access to Ports
+  - Authorised IP ranges – IPv4 and IPv6
+  - Control of inbound network (from other to the instance)
+  - Control of outbound network (from the instance to other)
+
+## The fundamental of network security in AWS (Good to know)
+
+- Can be attached to multiple instances
+- Locked down to a region / VPC combination
+- Does live “outside” the EC2 – if traffic is blocked the EC2 instance won’t see it
+- **It’s good to maintain one separate security group for SSH access**
+- If your application is not accessible (time out), then it’s a security group issue
+- If your application gives a “connection refused“ error, then it’s an application error or it’s not launched
+- All inbound traffic is **blocked** by default
+- All outbound traffic is **authorised** by default
+
+## Classic Ports to know
+
+- 22 = SSH (Secure Shell) - log into a Linux instance
+- 21 = FTP (File Transfer Protocol) – upload files into a file share
+- 22 = SFTP (Secure File Transfer Protocol) – upload files using SSH
+- 80 = HTTP – access unsecured websites
+- 443 = HTTPS – access secured websites
+- 3389 = RDP (Remote Desktop Protocol) – log into a Windows instance
 
 ## EC2 Instance Launch Types
 
-- **On Demand Instances**: short workload, predictable pricing
-- **Reserved Instances**: long workloads (>= 1 year)
-- **Convertible Reserved Instances**: long workloads with flexible instances
-- **Scheduled Reserved Instances**: launch within time window you reserve
-- **Spot Instances**: short workloads, for cheap, can lose instances
-- **Dedicated Instances**: no other customers will share your hardware
-- **Dedicated Hosts**: book an entire physical server, control instance placement
+- [**On Demand Instances**](#on-demand-instance): short workload, predictable pricing
+- [**Reserved**](#reserved-instances): (1 & 3 years)
+  - **Reserved Instances**: long workloads
+  - **Convertible Reserved Instances**: long workloads with flexible instances
+- [**Savings Plans**](#savings-plans) (1 & 3 years): commitment to an amount of usage, long workload
+- [**Spot Instances**](#spot-instances): short workloads, for cheap, can lose instances
+- [**Dedicated Instances**](#dedicated-instances): no other customers will share your hardware
+- [**Dedicated Hosts**](#dedicated-hosts): book an entire physical server, control instance placement
+- [**Capacity Reservations**](#capacity-reservations): reserve capacity in a specific AZ for any duration
 
-#### On Demand Instance
+### On Demand Instance
 
-* Pay for what you use
+- Pay for what you use:
+  - Linux or Windows - billing per second, after the first minute
+  - All other operating systems - billing per hour
 - Has the highest cost but no upfront payment
-- No long term commitment
-- Recommended for short-term and un-interrupted workloads, where you can’t predict how the application will behave
+- No long-term commitment
+- Recommended for **short-term** and **un-interrupted workloads**, where you can't predict how the application will behave
 
-#### Reserved Instances
+### Reserved Instances
 
-* Up to 75% compared to On-demand
-- Pay upfront for what you use with long term commitment
-- Reservation period can be 1 or 3 years
-- Reserve a specific instance type
-- Recommended for steady state usage applications (think database)
+- Up to **72%** discount compared to On-demand
+- You reserve a specific instance attributes (Instance Type, Region, Tenancy, OS)
+- Reservation Period – 1 year (+discount) or 3 years (+++discount)
+- Payment Options – No Upfront (+), Partial Upfront (++), All Upfront (+++)
+- Reserved Instance’s Scope – Regional or Zonal (reserve capacity in an AZ)
+- Recommended for steady-state usage applications (think database)
+- You can buy and sell in the Reserved Instance Marketplace
 
-#### Convertible Reserved Instances
+- Convertible Reserved Instance
+  - Can change the EC2 instance type, instance family, OS, scope and tenancy
+  - Up to 66% discount
 
-* Can change the EC2 instance type
-- Up to 54% discount
+### Savings Plans
 
-#### Scheduled Reserved Instances
+- Get a discount based on long-term usage (up to 72% - same as RIs)
+- Commit to a certain type of usage ($10/hour for 1 or 3 years)
+- Usage beyond EC2 Savings Plans is billed at the On-Demand price
 
-* Launch within time window you reserve
-- When you require a fraction of a day / week / month
+- Locked to a specific instance family & AWS region (e.g., M5 in us-east-1)
+- Flexible across:
+  - Instance Size (e.g., m5.xlarge, m5.2xlarge)
+  - OS (e.g., Linux, Windows)
+  - Tenancy (Host, Dedicated, Default)
 
-#### Spot Instances
+### Spot Instances
 
-* Can get a discount of up to 90% compared to On-demand
-- You bid a price and get the instance as long as its under the price
-- Price varies based on offer and demand
-- Spot instances are reclaimed within a 2 minute notification warning when the spot price goes above your bid
-- Used for batch jobs, Big Data analysis, or workloads that are resilient to failures
-- Not great for critical jobs or databases
+- Can get a discount of up to 90% compared to On-demand
+- Instances that you can “lose” at any point of time if your max price is less than the current spot price
+- The MOST cost-efficient instances in AWS
+- Useful for workloads that are resilient to failure
+  - Batch jobs
+  - Data analysis
+  - Image processing
+  - Any distributed workloads
+  - Workloads with a flexible start and end time
+- Not suitable for critical jobs or databases
 
-#### Dedicated Instances
+### Dedicated Hosts
 
-* Instances running on hardware that’s dedicated to you
+- A physical server with EC2 instance capacity fully dedicated to your use
+- Allows you address compliance requirements and use your existing server- bound software licenses (per-socket, per-core, pe—VM software licenses)
+- Purchasing Options:
+  - On-demand – pay per second for active Dedicated Host
+  - Reserved - 1 or 3 years (No Upfront, Partial Upfront, All Upfront)
+- The most expensive option
+- Useful for software that have complicated licensing model (BYOL – Bring Your Own License)
+- Or for companies that have strong regulatory or compliance needs
+
+### Dedicated Instances
+
+- Instances run on hardware that’s dedicated to you
 - May share hardware with other instances in same account
-- No control over instance placement (can move hardware after stop / start)
+- No control over instance placement (can move hardware after Stop / Start)
 
-#### Dedicated Hosts
+### Capacity Reservations
 
-* Physical dedicated Ec2 server for your use
-- Full control of Ec2 Instance placement
-- Visibility into the underlying sockets / physical cores of the hardware
-- Allocated for your account for a 3 year period reservation
-- More expensive
-- Useful for software that have a complicated licensing model (Bring your own License)
-- Or for a companies that have strong regulatory or compliance needs
+- Reserve On-Demand instances capacity in a specific AZ for any duration
+- You always have access to EC2 capacity when you need it
+- No time commitment (create/cancel anytime), no billing discounts
+- Combine with Regional Reserved Instances and Savings Plans to benefit from billing discounts
+- You’re charged at On-Demand rate whether you run instances or not
+- Suitable for short-term, uninterrupted workloads that needs to be in a specific AZ
 
-#### Which host is right for me?
+## Which purchasing option is right for me?
 
 - On demand: coming and staying in resort whenever we like, we pay the full price
 - Reserved: like planning ahead and if we plan to stay for a long time, we may get a good discount.
-- Spot instances: the hotel allows people to bid for the empty rooms and the highest bidder keeps the rooms.You can get kicked out at any time
+- Savings Plans: pay a certain amount per hour for certain period and stay in any room type (e.g., King, Suite, Sea View, …)
+- Spot instances: the hotel allows people to bid for the empty rooms and the highest bidder keeps the rooms. You can get kicked out at any time
 - Dedicated Hosts: We book an entire building of the resort
+- Capacity Reservations: you book a room for a period with full price even you don’t stay in it
 
-## EC2 Pricing
+## Price Comparison Example – m4.large – us-east-1
 
-- EC2 instances prices (per hour) varies based on these parameters:
-  - Region you’re in
-  - Instance Type you’re using
-  - On-Demand vs Spot vs Reserved vs Dedicated Host
-  - Linux vs Windows vs Private OS (RHEL, SLES, Windows SQL)
-  - You are billed by the second, with a minimum of 60 seconds.
-  - You also pay for other factors such as storage, data transfer, fixed IP public addresses, load balancing
-  - You do not pay for the instance if the instance is stopped
+| Price Type                             | Price (per hour)                           |
+| -------------------------------------- | ------------------------------------------ |
+| On-Demand                              | $0.10                                      |
+| Spot Instance (Spot Price)             | $0.038 - $0.039 (up to 61% off)            |
+| Reserved Instance (1 year)             | $0.062 (No Upfront) - $0.058 (All Upfront) |
+| Reserved Instance (3 years)            | $0.043 (No Upfront) - $0.037 (All Upfront) |
+| EC2 Savings Plan (1 year)              | $0.062 (No Upfront) - $0.058 (All Upfront) |
+| Reserved Convertible Instance (1 year) | $0.071 (No Upfront) - $0.066 (All Upfront) |
+| Dedicated Host                         | On-Demand Price                            |
+| Dedicated Host Reservation             | Up to 70% off                              |
+| Capacity Reservations                  | On-Demand Price                            |
 
-- Example
-  - t2.small in US-EAST-1 (VIRGINIA), cost $0.023 per Hour
-  - If used for:
-    - 6 seconds, it costs $0.023/60 = $0.000383 (minimum of 60 seconds)
-    - 60 seconds, it costs $0.023/60 = $0.000383 (minimum of 60 seconds)
-    - 30 minutes, it costs $0.023/2 = $0.0115
-    - 1 month, it costs $0.023 *24* 30 = $16.56 (assuming a month is 30 days)
-    - X seconds (X > 60), it costs $0.023 * X / 3600
-  - The best way to know the pricing is to consult the pricing page: <https://aws.amazon.com/ec2/pricing/on-demand/>
+## Shared Responsibility Model for EC2
 
-## AMIs
+| AWS                                      | USER                                                                                   |
+| ---------------------------------------- | -------------------------------------------------------------------------------------- |
+| Infrastructure (global network security) | Security Groups rules                                                                  |
+| Isolation on physical hosts              | Operating-system patches and updates                                                   |
+| Replacing faulty hardware                | Software and utilities installed on the EC2 instance                                   |
+| Compliance validation                    | IAM Roles assigned to EC2 & IAM user access management, Data security on your instance |
 
-### What's AMI?
+## EC2 Section – Summary
 
-- As we saw, AWS comes with base images such as:
-  - Ubuntu
-  - Fedora
-  - RedHat
-  - Windows
-  - Etc...
-- These images can be customized at runtime using EC2 User data
-- But what if we could create our own image, ready to go?
-- That’s an AMI – an image to use to create our instances
-- AMIs can be built for Linux or Windows machines
+- EC2 Instance: AMI (OS) + Instance Size (CPU + RAM) + Storage + security groups + EC2 User Data
+- Security Groups: Firewall attached to the EC2 instance
+- EC2 User Data: Script launched at the first start of an instance
+- SSH: start a terminal into our EC2 Instances (port 22)
+- EC2 Instance Role: link to IAM roles
+- Purchasing Options: On-Demand, Spot, Reserved (Standard + Convertible + Scheduled), Dedicated Host, Dedicated Instance
 
-### Why you use a custom AMI?
+* * *
 
-- Using a custom built AMI can provide the following advantages:
-  - Pre-installed packages needed
-  - Faster boot time (no need for long ec2 user data at boot time
-  - Machine comes configured with monitoring / enterprise software
-  - Security concerns – control over the machines in the network
-  - Control of maintenance and updates of AMIs over time
-  - Active Directory Integration out of the box
-  - Installing your app ahead of time (for faster deploys when auto-scaling)
-  - Using someone else’s AMI that is optimized for running an app, DB, etc...
-- **AMI are built for a specific AWS region (!)**
-
-## EC2 Instances Overview
-
-- Instances have 5 distinct characteristics advertised on the website:
-  - The RAM(type,amount,generation)
-  - The CPU(type,make,frequency,generation,numberofcores)
-  - The I/O (disk performance, EBS optimisations)
-  - The Network (network bandwidth, network latency
-  - The Graphical Processing Unit (GPU)
-- It may be daunting to choose the right instance type (there are over 50 of them) - <https://aws.amazon.com/ec2/instance-types/>
-- <https://ec2instances.info/> can help with summarizing the types of instances
-- R/C/P/G/H/X/I/F/Z/CR are specialised in RAM, CPU, I/O, Network, GPU
-- M instance types are balanced
-- T2/T3 instance types are “burstable”
-Burstable Instances (T2)
-- AWS has the concept of burstable instances (T2 machines)
-- Burst means that overall, the instance has OK CPU performance.
-- When the machine needs to process something unexpected (a spike in load for example), it can burst, and CPU can be VERY good.
-- If the machine bursts, it utilizes “burst credits”
-- If all the credits are gone, the CPU becomes BAD
-- If the machine stops bursting, credits are accumulated over time
-- Burstable instances can be amazing to handle unexpected traffic and getting the insurance that it will be handled correctly
-- If your instance consistently runs low on credit, you need to move to a different kind of non-burstable instance (all the ones described before).
-
-### T2 Unlimited
-
-- Nov 2017: It is possible to have an “unlimited burst credit balance
-- You pay extra money if you go over your credit balance, but you don’t lose in performance
-- Overall, it is a new offering, so be careful, costs could go high if you’re not monitoring the health of your instances
+[👈IAM: Identity Access & Management](./iam.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[EC2 Instance Storage 👉](./ec2_storage.md)
