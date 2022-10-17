@@ -28,7 +28,6 @@
     - [Scaling Strategies](#scaling-strategies)
     - [Good metrics to scale on](#good-metrics-to-scale-on)
     - [Scaling Cooldowns](#scaling-cooldowns)
-  - [ELB & ASG Summary](#elb--asg-summary)
 
 ## Scalability & High Availability
 
@@ -331,18 +330,6 @@
 - After a scaling activity happens, you are in the **cooldown period (default 300 seconds)**
 - During the cooldown period, the ASG will not launch or terminate additional instances (to allow for metrics to stabilize)
 - Advice: Use a ready-to-use AMI to reduce configuration time in order to be serving request faster and reduce the cooldown period
-
-## ELB & ASG Summary
-
-- High Availability vs Scalability (vertical and horizontal) vs Elasticity vs Agility in the Cloud
-- Elastic Load Balancers (ELB)
-  - Distribute traffic across backend EC2 instances, can be Multi-AZ
-  - Supports health checks
-  - 3 types: Application LB (HTTP – L7), Network LB (TCP – L4), Classic LB (old)
-- Auto Scaling Groups (ASG)
-  - Implement Elasticity for your application, across multiple AZ
-  - Scale EC2 instances based on the demand on your system, replace unhealthy
-  - Integrated with the ELB
 
 * * *
 
