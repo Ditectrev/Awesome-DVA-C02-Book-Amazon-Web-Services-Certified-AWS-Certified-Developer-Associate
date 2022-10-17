@@ -6,13 +6,11 @@
 ## Table of contents
 
 - AWS Fundamentals
-  - [IAM: Identity Access & Management](1-aws-fundamentals/iam.md)
-  - [EC2: Virtual Machines](1-aws-fundamentals/ec2.md)
-  - [EC2: Instance Storage Section](1-aws-fundamentals/ec2_storage.md)
-  - [Elastic Load Balancing & Auto Scaling Groups](1-aws-fundamentals/elb_asg.md)
-  - [Scalability & High Availability](1-aws-fundamentals/scalability_and_high_availability.md)
-  - [ELB: Elastic Load Balancers](1-aws-fundamentals/elastic_load_balancers.md)
-  - [ASG: Auto Scaling Group](1-aws-fundamentals/auto_scaling_group.md)
+  - [IAM: Identity Access & Management](aws-fundamentals/iam.md)
+  - [EC2: Virtual Machines](aws-fundamentals/ec2.md)
+  - [EC2: Instance Storage Section](aws-fundamentals/ec2_storage.md)
+  - [Elastic Load Balancing & Auto Scaling Groups](aws-fundamentals/elb_asg.md)
+  - [RDS, Aurora & ElastiCache](aws-fundamentals/rds_aurora_elasti_cache.md)
 
 ## Contributors
 
