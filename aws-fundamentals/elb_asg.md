@@ -1,11 +1,11 @@
 # Elastic Load Balancing & Auto Scaling Groups
 
-- [Elastic Load Balancing & Auto Scaling Groups](#elastic-load-balancing--auto-scaling-groups)
-  - [Scalability & High Availability](#scalability--high-availability)
+- [Elastic Load Balancing \& Auto Scaling Groups](#elastic-load-balancing--auto-scaling-groups)
+  - [Scalability \& High Availability](#scalability--high-availability)
   - [Vertical Scalability](#vertical-scalability)
   - [Horizontal Scalability](#horizontal-scalability)
   - [High Availability](#high-availability)
-  - [High Availability & Scalability For EC2](#high-availability--scalability-for-ec2)
+  - [High Availability \& Scalability For EC2](#high-availability--scalability-for-ec2)
   - [Scalability vs Elasticity (vs Agility)](#scalability-vs-elasticity-vs-agility)
   - [What is load balancing?](#what-is-load-balancing)
     - [Why use a load balancer?](#why-use-a-load-balancer)
@@ -24,7 +24,7 @@
   - [Connection Draining](#connection-draining)
   - [What’s an Auto Scaling Group?](#whats-an-auto-scaling-group)
     - [Attributes](#attributes)
-    - [CloudWatch Alarms & Scaling](#cloudwatch-alarms--scaling)
+    - [CloudWatch Alarms \& Scaling](#cloudwatch-alarms--scaling)
     - [Scaling Strategies](#scaling-strategies)
     - [Good metrics to scale on](#good-metrics-to-scale-on)
     - [Scaling Cooldowns](#scaling-cooldowns)
@@ -333,4 +333,4 @@
 
 * * *
 
-[👈  EC2 Instance Storage](./ec2_storage.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Amazon S3 👉](./s3.md)
+[👈  EC2 Instance Storage](./ec2_storage.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[RDS, Aurora & ElastiCache 👉](./rds_aurora_elasti_cache.md)

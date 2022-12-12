@@ -1,6 +1,6 @@
 # RDS, Aurora & ElastiCache
 
-- [RDS, Aurora & ElastiCache](#rds-aurora--elasticache)
+- [RDS, Aurora \& ElastiCache](#rds-aurora--elasticache)
   - [RDS Overview](#rds-overview)
     - [Advantage over using RDS versus deploying DB on EC2](#advantage-over-using-rds-versus-deploying-db-on-ec2)
     - [RDS - Storage Auto Scaling](#rds---storage-auto-scaling)
@@ -96,14 +96,10 @@
 | Can create up to 5 Read Replicas    | Data is only read/written to the main database    |
 | Data is only written to the main DB | Can only have 1 other AZ as failover              |
 
-| |
-| :-: |
-| **Read Replicas** |
+- **Read Replicas**
 ![Read Replicas Multi-AZ](../images/read_replicas_multi_AZ.png)
 
-| |
-| :-: |
-| **Multi-Region** |
+- **Multi-Region**
 ![Multi-Region](../images/multi_region.png)
 
 ## RDS Custom
