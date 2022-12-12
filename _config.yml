@@ -17,10 +17,10 @@ comments:
 # Make sure all variables are set properly. Check below link for detail.
 # https://giscus.vercel.app/
 giscus:
-  repo:                "kananinirav/AWS-Certified-Cloud-Practitioner-Notes"
-  repo-id:             "R_kgDOHx8vjA"
+  repo:                "kananinirav/AWS-Developer-Associate-Notes"
+  repo-id:             "R_kgDOHvX8pg"
   category:            "Comments"
-  category-id:         "DIC_kwDOHx8vjM4CS2vu"
+  category-id:         "DIC_kwDOHvX8ps4CTBwz"
   mapping:             "pathname"
   data-strict:         "1"
   reaction-enabled:    "1"
