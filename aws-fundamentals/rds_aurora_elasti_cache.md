@@ -10,6 +10,23 @@
     - [RDS Multi AZ (Disaster Recovery)](#rds-multi-az-disaster-recovery)
       - [RDS - From Single-AZ to Multi-AZ](#rds---from-single-az-to-multi-az)
   - [RDS Custom](#rds-custom)
+  - [Amazon Aurora](#amazon-aurora)
+    - [Aurora High Availability and Read Scaling](#aurora-high-availability-and-read-scaling)
+    - [Aurora DB Cluster](#aurora-db-cluster)
+    - [Features of Aurora](#features-of-aurora)
+  - [RDS \& Aurora Security](#rds--aurora-security)
+  - [Amazon ElastiCache Overview](#amazon-elasticache-overview)
+    - [ElastiCache Solution Architecture - DB Cache](#elasticache-solution-architecture---db-cache)
+    - [ElastiCache Solution Architecture - User Session Store](#elasticache-solution-architecture---user-session-store)
+    - [ElastiCache - Redis vs Memcached Replication](#elasticache---redis-vs-memcached-replication)
+    - [ElastiCache - Cache Security](#elasticache---cache-security)
+    - [ElastiCache Replication: Cluster Mode Disabled](#elasticache-replication-cluster-mode-disabled)
+    - [ElastiCache Replication: Cluster Mode Enabled](#elasticache-replication-cluster-mode-enabled)
+    - [Caching Implementation Considerations](#caching-implementation-considerations)
+    - [Lazy Loading / Cache-Aside / Lazy Population](#lazy-loading--cache-aside--lazy-population)
+    - [Write Through - Add or Update cache when database is updated](#write-through---add-or-update-cache-when-database-is-updated)
+    - [Cache Evictions and Time-to-live (TTL)](#cache-evictions-and-time-to-live-ttl)
+    - [Which caching design pattern is the most appropriate?](#which-caching-design-pattern-is-the-most-appropriate)
 
 ## RDS Overview
 
@@ -115,3 +132,178 @@
 - RDS vs. RDS Custom
   - RDS: entire database and the OS to be managed by AWS
   - RDS Custom: full admin access to the underlying OS and the database
+
+## Amazon Aurora
+
+- Aurora is a proprietary technology from AWS (not open sourced)
+- Postgres and MySQL are both supported as Aurora DB (that means your drivers will work as if Aurora was a Postgres or MySQL database)
+- Aurora is “AWS cloud optimized” and claims 5x performance improvement over MySQL on RDS, over 3x the performance of Postgres on RDS
+- Aurora storage automatically grows in increments of 10GB, up to 128 TB.
+- Aurora can have 15 replicas while MySQL has 5, and the replication process is faster (sub 10 ms replica lag)
+- Failover in Aurora is instantaneous. It’s HA (High Availability) native.
+- Aurora costs more than RDS (20% more) – but is more efficient
+
+### Aurora High Availability and Read Scaling
+
+- 6 copies of your data across 3 AZ:
+  - 4 copies out of 6 needed for writes
+  - 3 copies out of 6 need for reads
+  - Self healing with peer-to-peer replication
+  - Storage is striped across 100s of volumes
+- One Aurora Instance takes writes (master)
+- Automated failover for master in less than 30 seconds
+- Master + up to 15 Aurora Read Replicas serve reads
+- **Support for Cross Region Replication**
+
+![Amazon-Aurora-Architecture](./../images/amazon-aurora-architecture.png)
+
+### Aurora DB Cluster
+
+- An Aurora DB cluster is a group of one or more Aurora instances that function as a single, highly-available database.
+- The cluster is managed by Aurora and automatically handles tasks such as replication, backups, and failure detection.
+- Aurora also provides a feature called Aurora Global Database, which allows you to create a single Aurora database that spans multiple AWS regions for even higher availability and disaster recovery.
+
+![Aurora DB Cluster](../images/aurora-db-cluster.png)
+
+### Features of Aurora
+
+- Automatic fail-over
+- Backup and Recovery
+- Isolation and security
+- Industry compliance
+- Push-button scaling
+- Automated Patching with Zero Downtime
+- Advanced Monitoring
+- Routine Maintenance
+- Backtrack: restore data at any point of time without using backups
+
+## RDS & Aurora Security
+
+- **At-rest encryption:**
+  - Database master & replicas encryption using AWS KMS– must be defined as launch time
+  - If the master is not encrypted, the read replicas cannot be encrypted
+  - To encrypt an un-encrypted database, go through a DB snapshot & restore as encrypted
+- **In-flightencryption:** TLS-readybydefault, use the AWS TLS root certificates client-side
+- **IAM Authentication:** IAM roles to connect to your database (instead of username/pw)
+- **Security Groups:** Control Network access to your RDS / Aurora DB
+- **No SSH available** except on RDS Custom
+- **Audit Logs can be enabled** and sent to CloudWatch Logs for longer retention
+
+## Amazon ElastiCache Overview
+
+- The same way RDS is to get managed Relational Databases.
+- ElastiCache is to get managed Redis or Memcached
+- Caches are in-memory databases with really high performance, low latency
+- Helps reduce load off of databases for read intensive workloads
+- Helps make your application stateless
+- AWS takes care of OS maintenance / patching, optimizations, setup, configuration, monitoring, failure recovery and backups
+- Using ElastiCache involves heavy application code changes
+
+### ElastiCache Solution Architecture - DB Cache
+
+- Applications queries ElastiCache, if not available, get from RDS and store in ElastiCache.
+- Helps relieve load in RDS
+- Cache must have an invalidation strategy to make sure only the most current data is used in there.
+
+![db-cache](../images/db-cache.png)
+
+### ElastiCache Solution Architecture - User Session Store
+
+- User logs into any of the application
+- The application writes the session data into ElastiCache
+- The user hits another instance of our application
+- The instance retrieves the data and the user is already logged in
+
+![User Session Store](../images/user-session-store.png)
+
+### ElastiCache - Redis vs Memcached Replication
+
+| REDIS                                                   | MEMCACHED                                      |
+| ------------------------------------------------------- | ---------------------------------------------- |
+| Multi AZ with Auto-Failover                             | Multi-node for partitioning of data (sharding) |
+| Read Replicas to scale reads and have high availability | No high availability (replication)             |
+| Data Durability using AOF persistence                   | Non persistent                                 |
+| Backup and restore features                             | No backup and restore                          |
+|                                                         | Multi-threaded architecture                    |
+
+### ElastiCache - Cache Security
+
+- All caches in ElastiCache:
+  - **Do not support IAM authentication**
+  - IAM policies on ElastiCache are only used for AWS API-level security
+- **Redis AUTH**
+  - You can set a "password/token" when you create a Redis cluster
+  - This is an extra level of security for your cache (on top of security groups)
+  - Support SSL in flight encryption
+- Memcached
+  - Supports SASL-based authentication (advanced)
+
+### ElastiCache Replication: Cluster Mode Disabled
+
+- One primary node, up to 5 replicas
+- Asynchronous Replication
+- The primary node is used for read/write
+- The other nodes are read-only
+- **One shard, all nodes have all the data**
+- Guard against data loss if node failure
+- Multi-AZ enabled by default for failover
+- Helpful to scale read performance
+
+### ElastiCache Replication: Cluster Mode Enabled
+
+- **Data is partitioned across shards (helpful to scale writes)**
+- Each shard has a primary and up to 5 replica nodes (same concept as before)
+- Multi-AZ capability
+- Up to 500 nodes per cluster:
+  - 500 shards with single master
+  - 250 shards with 1 master and 1 replica
+  - 83 shards with one master and 5 replicas
+
+### Caching Implementation Considerations
+
+- Read more at: <https://aws.amazon.com/caching/implementation-considerations/>
+- **Is it safe to cache data?** Data may be out of date, eventually consistent
+- **Is caching effective for that data?**
+  - Pattern: data changing slowly, few keys are frequently needed
+  - Anti patterns: data changing rapidly, all large key space frequently needed
+- **Is data structured well for caching?**
+  - example: key value caching, or caching of aggregations results
+- Which caching design pattern is the most appropriate?
+
+### Lazy Loading / Cache-Aside / Lazy Population
+
+| Pros                                                                       | Cons                                                                                |
+| -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Only requested data is cached (the cache isn’t filled up with unused data) | Cache miss penalty that results in 3 round trips, noticeable delay for that request |
+| Node failures are not fatal (just increased latency to warm the cache)     | Stale data: data can be updated in the database and outdated in the cache           |
+
+![Lazy Loading](../images/lazy-loading.png)
+
+### Write Through - Add or Update cache when database is updated
+
+| Pros                                                        | Cons                                                                                                         |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Data in cache is never stale, reads are quick               | Missing Data until it is added / updated in the DB. Mitigation is to implement Lazy Loading strategy as well |
+| Write penalty vs Read penalty (each write requires 2 calls) | Cache churn – a lot of the data will never be read                                                           |
+
+![ Write Through](../images/write-through.png)
+
+### Cache Evictions and Time-to-live (TTL)
+
+- Cache eviction can occur in three ways:
+  - You delete the item explicitly in the cache
+  - Item is evicted because the memory is full and it’s not recently used (LRU)
+  - Yousetanitemtime-to-live(orTTL)
+- TTL are helpful for any kind of data:
+  - Leaderboards
+  - Comments
+  - Activity streams
+- TTL can range from few seconds to hours or days
+- If too many evictions happen due to memory, you should scale up or out
+
+### Which caching design pattern is the most appropriate?
+
+- Lazy Loading / Cache aside is easy to implement and works for many situations as a foundation, especially on the read side
+- Write-through is usually combined with Lazy Loading as targeted for the queries or workloads that benefit from this optimization
+- Setting a TTL is usually not a bad idea, except when you’re using Write-through. Set it to a sensible value for your application
+- Only cache the data that makes sense (user profiles, blogs, etc...)
