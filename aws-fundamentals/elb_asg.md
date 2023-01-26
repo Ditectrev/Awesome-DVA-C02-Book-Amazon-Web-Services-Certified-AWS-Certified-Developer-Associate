@@ -19,8 +19,8 @@
   - [Sticky Sessions (Session Affinity)](#sticky-sessions-session-affinity)
   - [Cross-Zone Load Balancing](#cross-zone-load-balancing)
   - [SSL/TLS - Basics](#ssltls---basics)
-    - [SSL – Server Name Indication (SNI)](#ssl--server-name-indication-sni)
-    - [Elastic Load Balancers – SSL Certificates](#elastic-load-balancers--ssl-certificates)
+    - [SSL - Server Name Indication (SNI)](#ssl---server-name-indication-sni)
+    - [Elastic Load Balancers - SSL Certificates](#elastic-load-balancers---ssl-certificates)
   - [Connection Draining](#connection-draining)
   - [What’s an Auto Scaling Group?](#whats-an-auto-scaling-group)
     - [Attributes](#attributes)
@@ -235,7 +235,7 @@
   - Clients can use SNI (Server Name Indication) to specify the hostname they reach
   - Ability to specify a security policy to support older versions of SSL / TLS (legacy clients)
 
-### SSL – Server Name Indication (SNI)
+### SSL - Server Name Indication (SNI)
 
 - SNI solves the problem of loading multiple SSL certificates onto one web server (to serve multiple websites)
 - It’s a “newer” protocol, and requires the client to indicate the hostname of the target server in the initial SSL handshake
@@ -244,7 +244,7 @@
   - Only works for ALB & NLB (newer generation), CloudFront
   - Does not work for CLB (older gen)
 
-### Elastic Load Balancers – SSL Certificates
+### Elastic Load Balancers - SSL Certificates
 
 - Classic Load Balancer (v1)
   - Support **only one SSL** certificate

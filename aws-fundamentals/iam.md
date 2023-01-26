@@ -1,21 +1,21 @@
 # IAM: Identity Access & Management
 
-- [IAM: Identity Access & Management](#iam-identity-access--management)
+- [IAM: Identity Access \& Management](#iam-identity-access--management)
   - [What Is IAM?](#what-is-iam)
-    - [IAM: Users & Groups](#iam-users--groups)
+    - [IAM: Users \& Groups](#iam-users--groups)
     - [IAM: Permissions](#iam-permissions)
     - [IAM Policies Structure](#iam-policies-structure)
-    - [IAM – Password Policy](#iam--password-policy)
+    - [IAM - Password Policy](#iam---password-policy)
     - [IAM Roles for Services](#iam-roles-for-services)
     - [IAM Security Tools](#iam-security-tools)
-    - [IAM Guidelines & Best Practices](#iam-guidelines--best-practices)
+    - [IAM Guidelines \& Best Practices](#iam-guidelines--best-practices)
     - [Shared Responsibility Model for IAM](#shared-responsibility-model-for-iam)
   - [Multi Factor Authentication - MFA](#multi-factor-authentication---mfa)
   - [MFA devices options in AWS](#mfa-devices-options-in-aws)
   - [How can users access AWS ?](#how-can-users-access-aws-)
   - [What’s the AWS CLI?](#whats-the-aws-cli)
   - [What’s the AWS SDK?](#whats-the-aws-sdk)
-  - [IAM Section – Summary](#iam-section--summary)
+  - [IAM Section - Summary](#iam-section---summary)
 
 ## What Is IAM?
 
@@ -78,7 +78,7 @@ Example:
 }
 ```
 
-### IAM – Password Policy
+### IAM - Password Policy
 
 - Strong passwords = higher security for your account
 - In AWS, you can setup a password policy:
@@ -178,7 +178,7 @@ Example:
   - IoT Device SDKs (Embedded C, Arduino, …)
 - Example: AWS CLI is built on AWS SDK for Python
 
-## IAM Section – Summary
+## IAM Section - Summary
 
 - **Users:** mapped to a physical user, has a password for AWS Console
 - **Groups:** contains users only

@@ -307,3 +307,7 @@
 - Write-through is usually combined with Lazy Loading as targeted for the queries or workloads that benefit from this optimization
 - Setting a TTL is usually not a bad idea, except when you’re using Write-through. Set it to a sensible value for your application
 - Only cache the data that makes sense (user profiles, blogs, etc...)
+
+* * *
+
+[👈  Elastic Load Balancing & Auto Scaling Groups](./elb_asg.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Route 53 👉](./route_53.md)

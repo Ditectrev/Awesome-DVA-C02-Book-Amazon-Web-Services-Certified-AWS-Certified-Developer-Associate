@@ -2,7 +2,7 @@
 
 - [EC2: Virtual Machines](#ec2-virtual-machines)
   - [What is Amazon EC2?](#what-is-amazon-ec2)
-    - [EC2 sizing & configuration options](#ec2-sizing--configuration-options)
+    - [EC2 sizing \& configuration options](#ec2-sizing--configuration-options)
     - [EC2 User Data](#ec2-user-data)
     - [EC2 Instance Types - Overview](#ec2-instance-types---overview)
       - [General Purpose](#general-purpose)
@@ -22,9 +22,9 @@
     - [Dedicated Instances](#dedicated-instances)
     - [Capacity Reservations](#capacity-reservations)
   - [Which purchasing option is right for me?](#which-purchasing-option-is-right-for-me)
-  - [Price Comparison Example – m4.large – us-east-1](#price-comparison-example--m4large--us-east-1)
+  - [Price Comparison Example - m4.large - us-east-1](#price-comparison-example---m4large---us-east-1)
   - [Shared Responsibility Model for EC2](#shared-responsibility-model-for-ec2)
-  - [EC2 Section – Summary](#ec2-section--summary)
+  - [EC2 Section - Summary](#ec2-section---summary)
 
 ## What is Amazon EC2?
 
@@ -244,7 +244,7 @@ Amazon Elastic Compute Cloud (Amazon EC2) provides scalable computing capacity i
 - Dedicated Hosts: We book an entire building of the resort
 - Capacity Reservations: you book a room for a period with full price even you don’t stay in it
 
-## Price Comparison Example – m4.large – us-east-1
+## Price Comparison Example - m4.large - us-east-1
 
 | Price Type                             | Price (per hour)                           |
 | -------------------------------------- | ------------------------------------------ |
@@ -267,7 +267,7 @@ Amazon Elastic Compute Cloud (Amazon EC2) provides scalable computing capacity i
 | Replacing faulty hardware                | Software and utilities installed on the EC2 instance                                   |
 | Compliance validation                    | IAM Roles assigned to EC2 & IAM user access management, Data security on your instance |
 
-## EC2 Section – Summary
+## EC2 Section - Summary
 
 - EC2 Instance: AMI (OS) + Instance Size (CPU + RAM) + Storage + security groups + EC2 User Data
 - Security Groups: Firewall attached to the EC2 instance

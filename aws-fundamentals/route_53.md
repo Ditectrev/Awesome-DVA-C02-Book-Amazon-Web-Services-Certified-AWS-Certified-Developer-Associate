@@ -1,5 +1,34 @@
 # Route 53
 
+- [Route 53](#route-53)
+  - [What is DNS?](#what-is-dns)
+    - [DNS Terminologies](#dns-terminologies)
+    - [How DNS Works](#how-dns-works)
+  - [Amazon Route 53](#amazon-route-53)
+    - [Route 53 - Records](#route-53---records)
+    - [Route 53 - RecordTypes](#route-53---recordtypes)
+    - [Route 53 - Hosted Zones](#route-53---hosted-zones)
+    - [Route 53 - RecordsTTL (TimeTo Live)](#route-53---recordsttl-timeto-live)
+    - [CNAME vs Alias](#cname-vs-alias)
+    - [Route 53 - Alias Records](#route-53---alias-records)
+    - [Route 53 - Alias Records Targets](#route-53---alias-records-targets)
+  - [Route 53 - Routing Policies](#route-53---routing-policies)
+    - [Routing Policies - Simple](#routing-policies---simple)
+    - [Routing Policies - Multi-Value](#routing-policies---multi-value)
+    - [Routing Policies - Weighted](#routing-policies---weighted)
+    - [Routing Policies - Latency-based](#routing-policies---latency-based)
+    - [Route 53 - Health Checks](#route-53---health-checks)
+    - [Health Checks - Monitor an Endpoint](#health-checks---monitor-an-endpoint)
+    - [Route 53 - Calculated Health Checks](#route-53---calculated-health-checks)
+    - [Health Checks - Private Hosted Zones](#health-checks---private-hosted-zones)
+    - [Routing Policies - Failover (Active-Passive)](#routing-policies---failover-active-passive)
+    - [Routing Policies - Geolocation](#routing-policies---geolocation)
+    - [Routing Policies - Geoproximity](#routing-policies---geoproximity)
+  - [Route 53 - Traffic flow](#route-53---traffic-flow)
+  - [Domain Registar vs. DNS Service](#domain-registar-vs-dns-service)
+    - [GoDaddy as Registrar \& Route 53 as DNS Service](#godaddy-as-registrar--route-53-as-dns-service)
+    - [3rd Party Registrar with Amazon Route 53](#3rd-party-registrar-with-amazon-route-53)
+
 ## What is DNS?
 
 - Domain Name System which translates the human friendly hostname into the machine IP addresses
@@ -50,7 +79,7 @@
 
 ![Route 53](../images/route_53.png)
 
-### Route 53 – Records
+### Route 53 - Records
 
 - How you want to route traffic for a domain
 - Each record contains:
@@ -63,7 +92,7 @@
   - (must know)A /AAAA / CNAME / NS
   - (advanced)CAA/DS/MX/NAPTR/PTR/SOA/TXT/SPF/SRV
 
-### Route 53 – RecordTypes
+### Route 53 - RecordTypes
 
 - **A** – maps a hostname to IPv4
 - **AAAA** – maps a hostname to IPv6
@@ -74,7 +103,7 @@
 - **NS** – Name Servers for the Hosted Zone
 - Control how traffic is routed for a domain
 
-### Route 53 – Hosted Zones
+### Route 53 - Hosted Zones
 
 - A container for records that define how to route traffic to a domain and its subdomains
 - **Public Hosted Zones** – contains records that specify how to route traffic on the Internet (public domain names) application1.mypublicdomain.com
@@ -90,7 +119,7 @@
 
 ![Hosted Zones](../images/hosted_zones.png)
 
-### Route 53 – RecordsTTL (TimeTo Live)
+### Route 53 - RecordsTTL (TimeTo Live)
 
 - **High TTL – e.g., 24 hr**
   - Less traffic on Route 53
@@ -114,7 +143,7 @@
   - Free of charge
   - Native health check
 
-### Route 53 – Alias Records
+### Route 53 - Alias Records
 
 - Maps a hostname to an AWS resource
 - An extension to DNS functionality
@@ -123,7 +152,7 @@
 - Alias Record is always of type A/AAAA for AWS resources (IPv4 / IPv6)
 - **You can’t set the TTL**
 
-### Route 53 – Alias Records Targets
+### Route 53 - Alias Records Targets
 
 - Elastic Load Balancers
 - CloudFront Distributions
@@ -135,7 +164,7 @@
 - Route 53 record in the same hosted zone
 - **You cannot set an ALIAS record for an EC2 DNS name**
 
-## Route 53 – Routing Policies
+## Route 53 - Routing Policies
 
 - Define how Route 53 responds to DNS queries
 - Don’t get confused by the word "Routing"
@@ -150,7 +179,7 @@
   - Geolocation
   - Geoproximity (using Route 53 Traffic Flow feature)
 
-### Routing Policies – Simple
+### Routing Policies - Simple
 
 - Typically, route traffic to a single resource
 - Can specify multiple values in the same record
@@ -158,7 +187,7 @@
 - When Alias enabled, specify only one AWS resource
 - Can’t be associated with Health Checks
 
-### Routing Policies – Multi-Value
+### Routing Policies - Multi-Value
 
 - Use when routing traffic to multiple resources
 - Route 53 return multiple values/resources
@@ -168,7 +197,7 @@
 
 ![Simple Routing](../images/simple_routing.png)
 
-### Routing Policies – Weighted
+### Routing Policies - Weighted
 
 - Control the % of the requests that go to each specific resource
 - DNS records must have the same name and type
@@ -179,14 +208,14 @@
 
 ![Weighted](../images/weighted.png)
 
-### Routing Policies – Latency-based
+### Routing Policies - Latency-based
 
 - Redirect to the resource that has the least latency close to us
 - Super helpful when latency for users is a priority
 - **Latency is based on traffic between users and AWS Regions**
 - Can be associated with Health Checks (has a failover capability)
 
-### Route 53 – Health Checks
+### Route 53 - Health Checks
 
 - HTTP Health Checks are only for **public resources**
 - Health Check => Automated DNS Failover:
@@ -195,7 +224,7 @@
   - Health checks that monitor CloudWatch Alarms (full control !!) – e.g., throttles of DynamoDB, alarms on RDS, custom metrics (helpful for private resources)
 - Health Checks are integrated with CW metrics
 
-### Health Checks – Monitor an Endpoint
+### Health Checks - Monitor an Endpoint
 
 - **About 15 global health checkers will check the endpoint health**
   - Healthy/UnhealthyThreshold–3(default)
@@ -207,7 +236,7 @@
 - Health Checks can be setup to pass / fail based on the text in the first **5120 bytes** of the response
 - Configure you router/firewall to allow incoming requests from Route 53 Health Checkers
 
-### Route 53 – Calculated Health Checks
+### Route 53 - Calculated Health Checks
 
 - Combine the results of multiple Health Checks into a single Health Check
 - You can use **OR, AND, or NOT**
@@ -215,7 +244,7 @@
 - Specify how many of the health checks need to pass to make the parent pass
 - Usage: perform maintenance to your website without causing all health checks to fail
 
-### Health Checks – Private Hosted Zones
+### Health Checks - Private Hosted Zones
 
 - Route 53 health checkers are outside the VPC
 - They can’t access **private** endpoints (private VPC or on-premises resource)
@@ -223,7 +252,7 @@
 
 ![Private Hosted](../images/private_hosted.png)
 
-### Routing Policies – Failover (Active-Passive)
+### Routing Policies - Failover (Active-Passive)
 
 - A failover routing policy is a routing policy used to route traffic to a primary resource, such as an Amazon Elastic Compute Cloud (EC2) instance, while monitoring a secondary resource as a backup.
 - If the primary resource becomes unavailable, traffic is automatically routed to the secondary resource.
@@ -233,7 +262,7 @@
 
 ![Failover](../images/failover.png)
 
-### Routing Policies – Geolocation
+### Routing Policies - Geolocation
 
 - Different from Latency-based!
 - **This routing is based on user location**
@@ -244,7 +273,7 @@
 
 ![Geolocation](../images/geolocation.png)
 
-### Routing Policies – Geoproximity
+### Routing Policies - Geoproximity
 
 - Route traffic to your resources based on the geographic location of users and resources
 - Ability to **shift more traffic to resources based** on the defined bias
@@ -256,7 +285,7 @@
   - Non-AWS resources (specify Latitude and Longitude)
 - You must use Route 53 **Traffic Flow** to use this feature
 
-## Route 53 – Traffic flow
+## Route 53 - Traffic flow
 
 - Simplify the process of creating and maintaining records in large and complex configurations
 - Visual editor to manage complex routing decision trees
@@ -286,3 +315,7 @@
   2. Update NS Records on 3rd party website to use Route 53 **Name Servers**
 - **Domain Registrar != DNS Service**
 - But every Domain Registrar usually comes with some DNS features
+
+* * *
+
+[👈  RDS, Aurora & ElastiCache](./rds_aurora_elasti_cache.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Route 53 👉](./route_53.md)
