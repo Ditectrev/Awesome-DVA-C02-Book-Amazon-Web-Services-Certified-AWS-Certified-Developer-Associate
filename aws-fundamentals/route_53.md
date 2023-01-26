@@ -143,11 +143,11 @@
 - DNS does not route any traffic, it only responds to the DNS queries
 - Route 53 Supports the following Routing Policies
   - Simple
+  - Multi-Value Answer
   - Weighted
   - Failover
   - Latency based
   - Geolocation
-  - Multi-Value Answer
   - Geoproximity (using Route 53 Traffic Flow feature)
 
 ### Routing Policies – Simple
@@ -157,6 +157,14 @@
 - **If multiple values are returned, a random one is chosen by the client**
 - When Alias enabled, specify only one AWS resource
 - Can’t be associated with Health Checks
+
+### Routing Policies – Multi-Value
+
+- Use when routing traffic to multiple resources
+- Route 53 return multiple values/resources
+- Can be associated with Health Checks (return only values for healthy resources)
+- Up to 8 healthy records are returned for each Multi-Value query
+- **Multi-Value is not a substitute for having an ELB**
 
 ![Simple Routing](../images/simple_routing.png)
 
@@ -224,3 +232,57 @@
 - This can be done by creating a health check for each resource, and then configuring the routing policy to route traffic to the primary resource as long as it is healthy, and to the secondary resource if the primary resource becomes unhealthy.
 
 ![Failover](../images/failover.png)
+
+### Routing Policies – Geolocation
+
+- Different from Latency-based!
+- **This routing is based on user location**
+- Specify location by Continent, Country or by US State (if there’s overlapping, most precise location selected)
+- Should create a **"Default"** record (in case there’s no match on location)
+- Use cases: website localization, restrict content distribution, load balancing, ...
+- Can be associated with Health Checks
+
+![Geolocation](../images/geolocation.png)
+
+### Routing Policies – Geoproximity
+
+- Route traffic to your resources based on the geographic location of users and resources
+- Ability to **shift more traffic to resources based** on the defined bias
+- To change the size of the geographic region, specify bias values:
+  - To expand (1 to 99) – more traffic to the resource
+  - To shrink (-1 to -99) – less traffic to the resource
+- Resources can be:
+  - AWS resources (specify AWS region)
+  - Non-AWS resources (specify Latitude and Longitude)
+- You must use Route 53 **Traffic Flow** to use this feature
+
+## Route 53 – Traffic flow
+
+- Simplify the process of creating and maintaining records in large and complex configurations
+- Visual editor to manage complex routing decision trees
+- Configurations can be saved as **Traffic Flow Policy**
+- Can be applied to different Route 53 Hosted Zones (different domain names)
+- Supports versioning
+
+## Domain Registar vs. DNS Service
+
+- You buy or register your domain name with a Domain Registrar typically by paying annual charges (e.g., GoDaddy, Amazon Registrar Inc., ...)
+- The Domain Registrar usually provides you with a DNS service to manage your DNS records
+- But you can use another DNS service to manage your DNS records
+- Example: purchase the domain from GoDaddy and use Route 53 to manage your DNS records
+
+### GoDaddy as Registrar & Route 53 as DNS Service
+
+- GoDaddy is a domain registrar, which means they allow you to register and manage domain names.
+- Route 53 is a DNS (Domain Name System) service provided by Amazon Web Services (AWS). It allows you to manage and route internet traffic to your domain using DNS records, such as A, MX, and CNAME records.
+- By using GoDaddy as your registrar and Route 53 as your DNS service, you would be able to register your domain with GoDaddy and then manage the DNS records for that domain using Route 53.
+
+![DNS Service](../images/DNS_service.png)
+
+### 3rd Party Registrar with Amazon Route 53
+
+- If you buy your domain on a 3rd party registrar, you can still use Route 53 as the DNS Service provider
+  1. Create a Hosted Zone in Route 53
+  2. Update NS Records on 3rd party website to use Route 53 **Name Servers**
+- **Domain Registrar != DNS Service**
+- But every Domain Registrar usually comes with some DNS features
