@@ -318,4 +318,4 @@
 
 * * *
 
-[👈  RDS, Aurora & ElastiCache](./rds_aurora_elasti_cache.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Route 53 👉](./route_53.md)
+[👈  RDS, Aurora & ElastiCache](./rds_aurora_elasti_cache.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[VPC 👉](./vpc.md)

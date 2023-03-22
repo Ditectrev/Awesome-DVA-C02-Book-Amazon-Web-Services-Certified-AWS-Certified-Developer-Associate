@@ -12,6 +12,7 @@
   - [Elastic Load Balancing & Auto Scaling Groups](aws-fundamentals/elb_asg.md)
   - [RDS, Aurora & ElastiCache](aws-fundamentals/rds_aurora_elasti_cache.md)
   - [Route 53](aws-fundamentals/route_53.md)
+  - [VPC](aws-fundamentals/vpc.md)
 
 ## Contributors
 

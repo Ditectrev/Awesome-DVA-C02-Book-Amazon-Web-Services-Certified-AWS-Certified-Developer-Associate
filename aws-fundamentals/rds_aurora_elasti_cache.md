@@ -27,6 +27,7 @@
     - [Write Through - Add or Update cache when database is updated](#write-through---add-or-update-cache-when-database-is-updated)
     - [Cache Evictions and Time-to-live (TTL)](#cache-evictions-and-time-to-live-ttl)
     - [Which caching design pattern is the most appropriate?](#which-caching-design-pattern-is-the-most-appropriate)
+    - [Amazon MemoryDB for Redis](#amazon-memorydb-for-redis)
 
 ## RDS Overview
 
@@ -307,6 +308,14 @@
 - Write-through is usually combined with Lazy Loading as targeted for the queries or workloads that benefit from this optimization
 - Setting a TTL is usually not a bad idea, except when you’re using Write-through. Set it to a sensible value for your application
 - Only cache the data that makes sense (user profiles, blogs, etc...)
+
+### Amazon MemoryDB for Redis
+
+- Redis-compatible, durable, in-memory database service
+- Ultra-fast performance with over 160 millions requests/second
+- Durable in-memory data storage with Multi-AZ transactional log
+- Scale seamlessly from 10s GBs to 100s TBs of storage
+- Use cases: web and mobile apps, online gaming, media streaming
 
 * * *
 

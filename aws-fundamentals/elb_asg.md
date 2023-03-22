@@ -28,6 +28,7 @@
     - [Scaling Strategies](#scaling-strategies)
     - [Good metrics to scale on](#good-metrics-to-scale-on)
     - [Scaling Cooldowns](#scaling-cooldowns)
+    - [Auto Scaling - Instance Refresh](#auto-scaling---instance-refresh)
 
 ## Scalability & High Availability
 
@@ -330,6 +331,13 @@
 - After a scaling activity happens, you are in the **cooldown period (default 300 seconds)**
 - During the cooldown period, the ASG will not launch or terminate additional instances (to allow for metrics to stabilize)
 - Advice: Use a ready-to-use AMI to reduce configuration time in order to be serving request faster and reduce the cooldown period
+
+### Auto Scaling - Instance Refresh
+
+- Goal: update launch template and then re-creating all EC2 instances
+- For this we can use the native feature of Instance Refresh
+- Setting of minimum healthy percentage
+- Specify warm-up time (how long until the instance is ready to use)
 
 * * *
 
