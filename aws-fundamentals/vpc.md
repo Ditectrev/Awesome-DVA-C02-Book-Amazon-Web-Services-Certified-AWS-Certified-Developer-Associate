@@ -1,9 +1,9 @@
 # VPC
 
 - [VPC](#vpc)
-  - [VPC \& Subnets Primer](#vpc--subnets-primer)
-  - [Internet Gateway \& NAT Gateways](#internet-gateway--nat-gateways)
-  - [Network ACL \& Security Groups](#network-acl--security-groups)
+  - [VPC And Subnets Primer](#vpc-and-subnets-primer)
+  - [Internet Gateway And NAT Gateways](#internet-gateway-and-nat-gateways)
+  - [Network ACL And Security Groups](#network-acl-and-security-groups)
     - [Network ACLs vs Security Groups](#network-acls-vs-security-groups)
   - [VPC Flow Logs](#vpc-flow-logs)
   - [VPC Peering](#vpc-peering)
@@ -11,7 +11,7 @@
   - [Site to Site VPN \& Direct Connect](#site-to-site-vpn--direct-connect)
   - [VPC Summary](#vpc-summary)
 
-## VPC & Subnets Primer
+## VPC And Subnets Primer
 
 - VPC: private network to deploy your resources (regional resource)
 - Subnets allow you to partition your network inside your VPC (Availability Zone resource)
@@ -19,13 +19,13 @@
 - A private subnet is a subnet that is not accessible from the internet
 - To define access to the internet and between subnets, we use Route Tables.
 
-## Internet Gateway & NAT Gateways
+## Internet Gateway And NAT Gateways
 
 - **Internet Gateways** helps our VPC instances connect with the internet
 - Public Subnets have a route to the internet gateway.
 - **NAT Gateways** (AWS-managed) & NAT Instances (self-managed) allow your instances in your **Private Subnets** to access the internet while remaining private
 
-## Network ACL & Security Groups
+## Network ACL And Security Groups
 
 - NACL (Network ACL)
   - A firewall which controls traffic from and to subnet
