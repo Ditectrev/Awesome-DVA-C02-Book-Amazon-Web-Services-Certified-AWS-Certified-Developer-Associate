@@ -1,11 +1,11 @@
-# Elastic Load Balancing & Auto Scaling Groups
+# Elastic Load Balancing ＆ Auto Scaling Groups
 
-- [Elastic Load Balancing \& Auto Scaling Groups](#elastic-load-balancing--auto-scaling-groups)
-  - [Scalability \& High Availability](#scalability--high-availability)
+- [Elastic Load Balancing ＆ Auto Scaling Groups](#elastic-load-balancing--auto-scaling-groups)
+  - [Scalability ＆ High Availability](#scalability--high-availability)
   - [Vertical Scalability](#vertical-scalability)
   - [Horizontal Scalability](#horizontal-scalability)
   - [High Availability](#high-availability)
-  - [High Availability \& Scalability For EC2](#high-availability--scalability-for-ec2)
+  - [High Availability ＆ Scalability For EC2](#high-availability--scalability-for-ec2)
   - [Scalability vs Elasticity (vs Agility)](#scalability-vs-elasticity-vs-agility)
   - [What is load balancing?](#what-is-load-balancing)
     - [Why use a load balancer?](#why-use-a-load-balancer)
@@ -30,7 +30,7 @@
     - [Scaling Cooldowns](#scaling-cooldowns)
     - [Auto Scaling - Instance Refresh](#auto-scaling---instance-refresh)
 
-## Scalability & High Availability
+## Scalability ＆ High Availability
 
 - Scalability means that an application / system can handle greater loads by adapting.
 - There are two kinds of scalability:
@@ -60,7 +60,7 @@
 - High availability means running your application / system in at least 2 Availability Zones
 - The goal of high availability is to survive a data center loss (disaster)
 
-## High Availability & Scalability For EC2
+## High Availability ＆ Scalability For EC2
 
 - Vertical Scaling: Increase instance size (= scale up / down)
   - From: t2.nano - 0.5G of RAM, 1 vCPU

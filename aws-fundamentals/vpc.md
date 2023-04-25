@@ -105,4 +105,4 @@ Reference: [https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Security.html#V
 
 * * *
 
-[👈  Route 53](./route_53.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[VPC 👉](./vpc_primer.md)
+[👈  Route 53](./route_53.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Amazon S3 👉](./s3.md)

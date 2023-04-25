@@ -13,6 +13,10 @@
   - [RDS, Aurora & ElastiCache](aws-fundamentals/rds_aurora_elasti_cache.md)
   - [Route 53](aws-fundamentals/route_53.md)
   - [VPC](aws-fundamentals/vpc.md)
+  - [Amazon S3](aws-fundamentals/s3.md)
+  - [Developing on AWS (CLI, SDK and IAM Policies)](./aws-fundamentals/developing.md)
+- AWS Deep Dive
+  -[Advanced S3](./aws-deep-dive/advanced-s3.md)
 
 ## Contributors
 
