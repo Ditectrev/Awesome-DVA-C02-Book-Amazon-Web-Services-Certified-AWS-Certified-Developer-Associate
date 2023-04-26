@@ -17,6 +17,7 @@
   - [Developing on AWS (CLI, SDK and IAM Policies)](./aws-fundamentals/developing.md)
 - AWS Deep Dive
   - [Advanced S3](./aws-deep-dive/advanced-s3.md)
+  - [CloudFront](./aws-deep-dive/cloudfront.md)
 
 ## Contributors
 

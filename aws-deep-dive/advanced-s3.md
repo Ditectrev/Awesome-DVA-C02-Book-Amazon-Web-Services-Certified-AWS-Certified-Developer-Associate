@@ -273,4 +273,4 @@
 
 * * *
 
-[👈  Developing on AWS](../aws-fundamentals/developing.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Advanced S3 👉](./advanced-s3.md)
+[👈  Developing on AWS](../aws-fundamentals/developing.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Home](../README.md)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[CloudFront 👉](./cloudfront.md)
