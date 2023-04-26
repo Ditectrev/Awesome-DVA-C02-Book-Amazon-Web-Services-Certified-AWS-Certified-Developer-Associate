@@ -101,7 +101,7 @@
 
 ## S3 Performance
 
-| Multi-Par t upload                                      | S3 Transfer Acceleration                                                                                                               |
+| Multi-Part upload                                       | S3 Transfer Acceleration                                                                                                               |
 | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | recommended for files > 100MB, must use for files > 5GB | Increase transfer speed by transferring file to an AWS edge location which will forward the data to the S3 bucket in the target region |
 | Can help parallelize uploads (speed up transfers)       | Compatible with multi-part upload                                                                                                      |
