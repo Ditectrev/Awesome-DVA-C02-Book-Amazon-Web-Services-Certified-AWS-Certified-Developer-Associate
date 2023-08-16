@@ -18,6 +18,7 @@
 - AWS Deep Dive
   - [Advanced S3](./aws-deep-dive/advanced-s3.md)
   - [CloudFront](./aws-deep-dive/cloudfront.md)
+  - [Containers on AWS(ECS, ECR, Fargate)](./aws-deep-dive/containers-on-aws.md)
 
 ## Contributors
 
