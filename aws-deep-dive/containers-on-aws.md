@@ -133,4 +133,157 @@
 
 - Starting number of tasks: 4
 
-![Alt text](./../images/ecs-rolling-updates-2.png)
+![ECS Rolling Update](./../images/ecs-rolling-updates-2.png)
+
+## Amazon ECS – Task Definitions
+
+- Task definitions are metadata in JSON form to tell ECS how to run a Docker container
+- It contains crucial information, such as:
+  - Image Name
+  - Port Binding for Container and Host • Memory and CPU required
+  - Environment variables
+  - Networking information
+  - IAM Role
+  - Logging configuration (ex CloudWatch)
+  - Can define up to 10 containers in a Task Definition
+
+## Amazon ECS – Load Balancing (EC2 Launch Type)
+
+- We get a **Dynamic Host Port Mapping if you define only the container port in the task definition**
+- The ALB finds the right port on your EC2 Instances
+- **You must allow on the EC2 instance’s Security Group any port from the ALB’s Security Group**
+
+![Load Balancing (EC2 Launch Type)](./../images/ecs-ec2-launch-type-load-balancer.png)
+
+## Amazon ECS – Load Balancing (Fargate)
+
+- Each task has a **unique private IP**
+- **Only define the container port** (host port is not applicable)
+- Example
+  - **ECS ENI Security Group**
+    - Allow port 80 from the ALB
+  - ALB Security Group
+    - Allow port 80/443 from web
+
+![Alt text](./../images/ecs-load-balancing-fargate.png)
+
+## Amazon ECS – Environment Variables
+
+- Environment Variable
+  - **Hardcoded** – e.g., URLs
+  - **SSM Parameter Store** – sensitive variables (e.g., API keys, shared configs)
+  - **Secrets Manager** – sensitive variables (e.g., DB passwords)
+- Environment Files (bulk) – Amazon S3
+
+## Amazon ECS – Data Volumes (Bind Mounts)
+
+- Share data between multiple containers in the same Task Definition
+- Works for both **EC2** and **Fargate** tasks
+- **EC2 Tasks** – using EC2 instance storage
+  - Data are tied to the lifecycle of the EC2 instance
+- **Fargate Tasks** – using ephemeral storage
+  - Data are tied to the container(s) using them
+  - 20 GiB – 200 GiB (default 20 GiB)
+- **Use cases:**
+  - Share ephemeral data between multiple containers
+  - Sidecar container pattern, where the sidecar container used to send metrics/logs to other destinations (separation of concerns)
+
+## Amazon ECS – Task Placement
+
+- When an ECS task is started with EC2 Launch Type, ECS must determine where to place it, with the constraints of **CPU** and **memory (RAM)**
+- Similarly, when a service scales in, ECS needs to determine which task to terminate
+- You can define:
+- Task Placement Strategy
+- Task Placement Constraints
+- **Note: only for ECS Tasks with EC2 LaunchType (Fargate not supported)**
+
+### Amazon ECS – Task Placement Process
+
+- Task Placement Strategies are a best effort
+- When Amazon ECS places a task, it uses the following process to select the appropriate EC2 Container instance:
+  1. Identify which instances that satisfy the **CPU, memory, and port** requirements
+  2. Identify which instances that satisfy the **Task Placement Constraints**
+  3. Identify which instances that satisfy the **Task Placement Strategies**
+  4. Select the instances
+
+### Amazon ECS –Task Placement Strategies
+
+- **Binpack**
+  - Tasks are placed on the least available amount of CPU and Memory
+  - Minimizes the number of EC2 instances in use (cost savings)
+- **Random**
+  - Tasks are placed randomly
+- **Spread**
+  - Tasks are placed evenly based on the specified value
+  - Example: **instanceId, attribute:ecs.availability-zone,...**
+- **distinctInstance**
+  - Tasks are placed on a different EC2 instance
+- **memberOf**
+  - Tasks are placed on EC2 instances that satisfy a specified expression
+  - Uses the Cluster Query Language (advanced)
+
+## Amazon ECR
+
+- ECR = Elastic Container Registry
+- Store and manage Docker images on AWS
+- **Private** and **Public** repository (**Amazon ECR Public Gallery** <https://gallery.ecr.aws>)
+- Fully integrated with ECS, backed by Amazon S3
+- Access is controlled through IAM (permission errors => policy)
+- Supports image vulnerability scanning, versioning, image tags, image lifecycle,...
+
+### Amazon ECR – Using AWS CLI
+
+- **Login Command**
+  - AWS CLI v2: `aws ecr get-login-password --region region | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.region.amazonaws.com`
+- **Docker Commands**
+  - Push: `docker push aws_account_id.dkr.ecr.region.amazonaws.com/demo:latest`
+  - Pull: `docker pull aws_account_id.dkr.ecr.region.amazonaws.com/demo:latest`
+- In case an EC2 instance (or you) can’t pull a Docker image, check IAM
+permissions
+
+## AWS Copilot
+
+- CLI tool to build, release, and operate production-ready containerized apps
+- Run your apps on **AppRunner, ECS, and Fargate**
+- Helps you focus on building apps rather than setting up infrastructure
+- Provisions all required infrastructure for containerized apps (ECS,VPC, ELB, ECR...)
+- Automated deployments with one command using CodePipeline
+- Deploy to multiple environments
+- Troubleshooting, logs, health status...
+
+## Amazon EKS Overview
+
+- Amazon EKS = Amazon Elastic Kubernetes Service
+- It is a way to launch **managed Kubernetes clusters on AWS**
+- Kubernetes is an **open-source system** for automatic deployment, scaling and management of containerized (usually Docker) application
+- It’s an alternative to ECS, similar goal but different API
+- EKS supports **EC2** if you want to deploy worker nodes or **Fargate** to deploy serverless containers
+- **Use case:** if your company is already using Kubernetes on-premises or in another cloud, and wants to migrate to AWS using Kubernetes
+- **Kubernetes is cloud-agnostic** (can be used in any cloud – Azure, GCP...)
+- For multiple regions, deploy one EKS cluster per region
+- Collect logs and metrics using **CloudWatch Container Insights**
+
+### Amazon EKS - Diagram
+
+![EKS](./../images/eks.png)
+
+### Amazon EKS – Node Types
+
+- Managed Node Groups
+  - Creates and manages Nodes (EC2 instances) for you
+  - Nodes are part of an ASG managed by EKS • Supports On-Demand or Spot Instances
+- Self-Managed Nodes
+  - Nodes created by you and registered to the EKS cluster and managed by an ASG
+  - You can use prebuilt AMI - Amazon EKS Optimized AMI • Supports On-Demand or Spot Instances
+- AWS Fargate
+  - No maintenance required; no nodes managed
+
+### Amazon EKS – Data Volumes
+
+- Need to specify **StorageClass** manifest on your EKS cluster
+- Leverages a **Container Storage Interface (CSI)** compliant driver
+- Support for...
+- Amazon EBS
+- Amazon EFS (works with Fargate)
+- Amazon FSx for Lustre
+- Amazon FSx for NetApp ONTAP
